@@ -31,7 +31,7 @@ public class JpaConfig {
 
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(jpaDataSource());
-        em.setPackagesToScan("com.coffeekong.model");
+        em.setPackagesToScan("org.jpatest.demo.model");
         em.setJpaVendorAdapter(vendorAdapter);
 
         return em;
