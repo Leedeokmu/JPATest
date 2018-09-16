@@ -20,7 +20,7 @@ public class Author {
     private String email;
 
     @OneToOne
-    @JoinColumn(name = "email", referencedColumnName = "email")
+    @JoinColumn(name = "email", referencedColumnName = "email", insertable = false, updatable = false)
     private Person person;
 
 }

@@ -21,10 +21,10 @@
             <tbody>
                 <c:forEach items="${authorList}" var="author">
                     <tr>
-                        <td>${id}</td>
-                        <td>${email}</td>
-                        <td>${name}</td>
-                        <td>${person.phone}</td>
+                        <td>${author.id}</td>
+                        <td>${author.email}</td>
+                        <td>${author.name}</td>
+                        <td>${author.person.phone}</td>
                     </tr>
                 </c:forEach>
             </tbody>

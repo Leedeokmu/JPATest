@@ -4,6 +4,7 @@ import lombok.Data;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,12 +22,14 @@ public class Post {
     @Column
     private String content;
     @Column
-    private Integer postId;
-    @Column
     private DateTime regDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "postId", referencedColumnName = "id")
-    private List<Reply> replyList;
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private List<Reply> replyList = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name="author", referencedColumnName = "id", insertable = false, updatable = false)
+    private Author authorDetail;
 
 }

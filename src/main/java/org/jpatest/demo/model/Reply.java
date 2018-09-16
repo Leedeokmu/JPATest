@@ -18,6 +18,16 @@ public class Reply {
     @Column
     private String content;
     @Column
+    private Integer postId;
+    @Column
     private DateTime regDate;
+
+    @OneToOne
+    @JoinColumn(name="author", referencedColumnName = "id", insertable = false, updatable = false)
+    private Author authorDetail;
+
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "id", referencedColumnName = "postId")
+//    private Post post = new Post();
 
 }
