@@ -21,7 +21,7 @@ public class Post {
     private String title;
     @Column
     private String content;
-    @Column
+    @Column(name="reg_date")
     private DateTime regDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

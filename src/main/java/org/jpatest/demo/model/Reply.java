@@ -19,7 +19,7 @@ public class Reply {
     private String content;
     @Column
     private Integer postId;
-    @Column
+    @Column(name="reg_date")
     private DateTime regDate;
 
     @OneToOne

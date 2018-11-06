@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,7 @@ public class FrontController {
         model.addAttribute("authorList", authorList);
         return "authorList";
     }
+
     @GetMapping("/post/list")
     public String getPostList(Model model){
         List<Post> postList = postRepository.findAll();
@@ -45,10 +49,28 @@ public class FrontController {
 
     @GetMapping("/post/write")
     public String getPostWrite(){
-
         return "postWrite";
     }
 
+    @PostMapping("/post/write")
+    public String postPostWrite(
+            @RequestParam(value = "author") String author,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content,
+            RedirectAttributes rttr
+    ){
+        Author auth = authorRepository.findByName(author);
+        if(auth != null){
+            Post post = new Post();
+            post.setAuthor(auth.getId());
+            post.setTitle(title);
+            post.setContent(content);
+            Post newOne = postRepository.save(post);
+            rttr.addFlashAttribute("status", "success");
+        }else{
+            rttr.addFlashAttribute("status", "failure");
+        }
 
-
+        return "redirect:/post/list";
+    }
 }
