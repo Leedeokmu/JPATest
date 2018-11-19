@@ -1,9 +1,10 @@
 package org.jpatest.demo.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,10 @@ public class Post {
     private String title;
     @Column
     private String content;
+//    @Column(name="reg_date", updatable = false, insertable = false, columnDefinition = "reg_date DEFAULT CURRENT_TIMESTAMP")
     @Column(name="reg_date")
-    private DateTime regDate;
+    @CreationTimestamp
+    private LocalDateTime regDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "id")

@@ -1,9 +1,9 @@
 package org.jpatest.demo.model;
 
 import lombok.Data;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -20,7 +20,7 @@ public class Reply {
     @Column
     private Integer postId;
     @Column(name="reg_date")
-    private DateTime regDate;
+    private LocalDateTime regDate;
 
     @OneToOne
     @JoinColumn(name="author", referencedColumnName = "id", insertable = false, updatable = false)

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -43,12 +44,24 @@ public class FrontController {
     public String getPostList(Model model){
         List<Post> postList = postRepository.findAll();
 
+
         model.addAttribute("postList", postList);
         return "postList";
     }
 
     @GetMapping("/post/write")
     public String getPostWrite(){
+        return "postWrite";
+    }
+
+    @GetMapping("/post/write/{postId}")
+    public String getPostDetail(
+            @PathVariable("postId") Integer postId,
+            Model model
+    ){
+        Post post = postRepository.findById(postId);
+        model.addAttribute("post", post);
+
         return "postWrite";
     }
 
@@ -73,4 +86,29 @@ public class FrontController {
 
         return "redirect:/post/list";
     }
+
+    @PostMapping("/post/write/{postId}")
+    public String postPostWrite(
+            @PathVariable("postId") Integer postId,
+            @RequestParam(value = "author") String author,
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "content") String content,
+            RedirectAttributes rttr
+    ){
+        Author auth = authorRepository.findByName(author);
+        if(auth != null){
+            Post post = postRepository.findById(postId);
+            post.setAuthor(auth.getId());
+            post.setTitle(title);
+            post.setContent(content);
+            postRepository.save(post);
+            Long count = postRepository.countByAuthor(auth.getId());
+            rttr.addFlashAttribute("status", "success");
+        }else{
+            rttr.addFlashAttribute("status", "failure");
+        }
+
+        return "redirect:/post/list";
+    }
+
 }

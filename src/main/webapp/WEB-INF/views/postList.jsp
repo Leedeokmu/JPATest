@@ -14,18 +14,21 @@
 <body>
     <table>
         <thead>
-        <th>id</th>
-        <th>title</th>
-        <th>author</th>
-        <th>rdate</th>
+            <th>id</th>
+            <th>title</th>
+            <th>author</th>
+            <th>rdate</th>
         </thead>
         <tbody>
             <c:forEach items="${postList}" var="post">
             <tr>
-                <td>${post.id}</td>
+                <td>
+                    <a href="/post/write/${post.id}">${post.id}</a>
+                </td>
                 <td>${post.title}</td>
                 <td>${post.authorDetail.name}</td>
                 <td>${post.regDate}</td>
+                <%--<td></td>--%>
             </tr>
             </c:forEach>
         </tbody>

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -42,7 +43,7 @@ import java.util.concurrent.ScheduledExecutorService;
 })
 @EnableAspectJAutoProxy(proxyTargetClass=true)
 @SpringBootApplication
-public class JpaTestApplication extends WebMvcConfigurerAdapter {
+public class JpaTestApplication implements WebMvcConfigurer {
     public static void main(String[] args) {
         SpringApplication.run(JpaTestApplication.class, args);
     }
@@ -67,7 +68,6 @@ public class JpaTestApplication extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("redirect:/index");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        super.addViewControllers(registry);
     }
 
     @Bean

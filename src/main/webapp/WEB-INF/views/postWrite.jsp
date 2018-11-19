@@ -12,13 +12,13 @@
     <title>write post</title>
 </head>
 <body class="container">
-    <form action="/post/write" method="post">
+    <form action="/post/write/${post.id}" method="post">
         <div class="row">
             <div class="col-md-2">
                 <label>author</label>
             </div>
             <div class="col-md-4">
-                <input type="text" name="author" class="form-control"/>
+                <input type="text" name="author" class="form-control" value="${post.authorDetail.name}"/>
             </div>
         </div>
         <div class="row">
@@ -26,7 +26,7 @@
                 <label>title</label>
             </div>
             <div class="col-md-4">
-                <input type="text" name="title" class="form-control"/>
+                <input type="text" name="title" class="form-control" value="${post.title}"/>
             </div>
         </div>
         <div class="row">
@@ -34,7 +34,7 @@
                 <label>content</label>
             </div>
             <div class="col-md-4">
-                <textarea name="content"  cols="10" rows="3" class="form-control"></textarea>
+                <textarea name="content"  cols="10" rows="3" class="form-control">${post.content}</textarea>
             </div>
         </div>
         <input type="submit" value="SUBMIT">
