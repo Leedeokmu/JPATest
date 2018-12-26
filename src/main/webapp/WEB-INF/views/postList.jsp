@@ -22,9 +22,7 @@
         <tbody>
             <c:forEach items="${postList}" var="post">
             <tr>
-                <td>
-                    <a href="/post/write/${post.id}">${post.id}</a>
-                </td>
+                <td><a href="/post/write/${post.id}">${post.id}</a></td>
                 <td>${post.title}</td>
                 <td>${post.authorDetail.name}</td>
                 <td>${post.regDate}</td>
@@ -36,6 +34,7 @@
     <div>
         <button class='btn btn-default' onclick="addPost()">ADD POST</button>
     </div>
+    <%@include file="paging.jsp"%>
 </body>
 </html>
 <script>

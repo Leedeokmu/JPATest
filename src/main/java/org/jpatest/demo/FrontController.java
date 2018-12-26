@@ -26,14 +26,14 @@ public class FrontController {
 
 
     @GetMapping("/index")
-    public String getIndex(Model model){
+    public String getIndex(Model model) {
 
         model.addAttribute("list", new ArrayList<>());
         return "index";
     }
 
     @GetMapping("/author/list")
-    public String getAuthorList(Model model){
+    public String getAuthorList(Model model) {
         List<Author> authorList = authorRepository.findAll();
 
         model.addAttribute("authorList", authorList);
@@ -41,16 +41,16 @@ public class FrontController {
     }
 
     @GetMapping("/post/list")
-    public String getPostList(Model model){
+    public String getPostList(Model model) {
         List<Post> postList = postRepository.findAll();
 
-
+        String json = "";
         model.addAttribute("postList", postList);
         return "postList";
     }
 
     @GetMapping("/post/write")
-    public String getPostWrite(){
+    public String getPostWrite() {
         return "postWrite";
     }
 
@@ -58,7 +58,7 @@ public class FrontController {
     public String getPostDetail(
             @PathVariable("postId") Integer postId,
             Model model
-    ){
+    ) {
         Post post = postRepository.findById(postId);
         model.addAttribute("post", post);
 
@@ -71,16 +71,16 @@ public class FrontController {
             @RequestParam(value = "title") String title,
             @RequestParam(value = "content") String content,
             RedirectAttributes rttr
-    ){
+    ) {
         Author auth = authorRepository.findByName(author);
-        if(auth != null){
+        if (auth != null) {
             Post post = new Post();
             post.setAuthor(auth.getId());
             post.setTitle(title);
             post.setContent(content);
             Post newOne = postRepository.save(post);
             rttr.addFlashAttribute("status", "success");
-        }else{
+        } else {
             rttr.addFlashAttribute("status", "failure");
         }
 
@@ -94,9 +94,9 @@ public class FrontController {
             @RequestParam(value = "title") String title,
             @RequestParam(value = "content") String content,
             RedirectAttributes rttr
-    ){
+    ) {
         Author auth = authorRepository.findByName(author);
-        if(auth != null){
+        if (auth != null) {
             Post post = postRepository.findById(postId);
             post.setAuthor(auth.getId());
             post.setTitle(title);
@@ -104,10 +104,9 @@ public class FrontController {
             postRepository.save(post);
             Long count = postRepository.countByAuthor(auth.getId());
             rttr.addFlashAttribute("status", "success");
-        }else{
+        } else {
             rttr.addFlashAttribute("status", "failure");
         }
-
         return "redirect:/post/list";
     }
 

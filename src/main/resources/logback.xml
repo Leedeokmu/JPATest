@@ -19,6 +19,7 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %-5level %logger{32} - %msg%n</pattern>
@@ -30,7 +31,6 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
     <logger name="org.springframework.jdbc" level="DEBUG" />
     <logger name="org.springframework.security" level="DEBUG" />
     <!-- 3rdparty Loggers -->
-
     <logger name="org.springframework.core" level="DEBUG" />
     <logger name="org.springframework.beans" level="DEBUG" />
     <logger name="org.springframework.context" level="DEBUG" />
@@ -39,7 +39,6 @@ See here for more details: http://gordondickens.com/wordpress/2013/03/27/sawing-
     <logger name="java.sql.Statement" level="DEBUG" />
     <logger name="java.sql.PreparedStatement" level="DEBUG" />
     <logger name="java.sql.ResultSet" level="DEBUG" />
-
     <!-- Query Loggers -->
     <logger name="jdbc.sqlonly" additivity="false" level="DEBUG"/>
     <logger name="jdbc.resultsettable" additivity="false"  level="DEBUG"/>
