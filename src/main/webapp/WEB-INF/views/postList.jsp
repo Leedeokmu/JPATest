@@ -39,7 +39,7 @@
 </html>
 <script>
     function movePage(pageNo) {
-        var url = '/gameCharacter/list?';
+        let url = '/gameCharacter/list?';
         if (pageNo > 0) {
             url += '&pageNo=' + pageNo;
         }

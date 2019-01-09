@@ -1,6 +1,5 @@
 package org.jpatest.demo;
 
-
 import org.jpatest.demo.model.Author;
 import org.jpatest.demo.model.Post;
 import org.jpatest.demo.repository.AuthorRepository;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +39,10 @@ public class FrontController {
         return "authorList";
     }
 
-    @GetMapping("/post/list")
+    @GetMapping("post/list")
     public String getPostList(Model model) {
         List<Post> postList = postRepository.findAll();
 
-        String json = "";
         model.addAttribute("postList", postList);
         return "postList";
     }

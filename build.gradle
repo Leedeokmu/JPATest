@@ -20,8 +20,6 @@ apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
@@ -30,6 +28,7 @@ final String DEFAULT_PROFILE = 'dev'
 if(!project.hasProperty('profile') || !profile){
     ext.profile = DEFAULT_PROFILE
 }
+
 sourceSets{
     main{
         resources{
@@ -54,12 +53,15 @@ sourceSets{
 dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
+//    compile('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile('org.springframework.boot:spring-boot-starter-tomcat')
-    compile('org.springframework.boot:spring-boot-devtools')
+    compile('org.springframework.boot:spring-boot-starter-json')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-devtools')
 
     // commons libraries
     compile 'commons-collections:commons-collections:3.2'
@@ -67,16 +69,19 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
 
     // lombok
-    compile 'org.projectlombok:lombok:1.16.6'
+    compile 'org.projectlombok:lombok:1.18.4'
 
     // servlet
-    compile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: '2.3.1'
+//    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+    compile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: '2.3.3'
     compile 'javax.servlet:jstl:1.2'
 
     // jackson for json communication
     compile group: 'org.json', name: 'json', version: '20160212'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.4'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
+
+//    compile 'com.fasterxml.jackson.core:jackson-core:2.9.4'
+//    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
 //    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.9.4'
 
     // session

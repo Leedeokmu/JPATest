@@ -2,15 +2,15 @@ package org.jpatest.demo;
 
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -19,10 +19,10 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -36,13 +36,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class, SessionAutoConfiguration.class})
-@PropertySources({
-        @PropertySource(name = "application", value = "classpath:application.properties"),
-        @PropertySource(value="file:${properties_file}", ignoreResourceNotFound = true)
-})
 @EnableAspectJAutoProxy(proxyTargetClass=true)
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.jpatest.demo", exclude = {DataSourceAutoConfiguration.class, SessionAutoConfiguration.class})
 public class JpaTestApplication implements WebMvcConfigurer {
     public static void main(String[] args) {
         SpringApplication.run(JpaTestApplication.class, args);
@@ -51,17 +46,17 @@ public class JpaTestApplication implements WebMvcConfigurer {
     // resource handler 등록
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.htm").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.js").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.css").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.jpg").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.jpeg").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.png").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.gic").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.ico").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.json").addResourceLocations("/");
-        registry.addResourceHandler("/**/*.ttf").addResourceLocations("/");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/webapp/**");
+//        registry.addResourceHandler("/**/*.htm").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.js").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.css").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.jpg").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.jpeg").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.png").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.gic").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.ico").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.json").addResourceLocations("/");
+//        registry.addResourceHandler("/**/*.ttf").addResourceLocations("/");
     }
     // 초기화면 등록
     @Override
@@ -76,18 +71,20 @@ public class JpaTestApplication implements WebMvcConfigurer {
         requestMappingHandlerMapping.setUseSuffixPatternMatch(true);
         return requestMappingHandlerMapping;
     }
+
     // message source
-//    @Bean
-//    public MessageSource messageSource(){
-//        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-//        messageSource.setDefaultEncoding("UTF-8");
-//        messageSource.setBasenames("classpath:messages");
-//        return messageSource;
-//    }
-//
+    @Bean
+    public MessageSource messageSource(){
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasenames("classpath:messages");
+        return messageSource;
+    }
+
 //    @Bean
 //    public MessageUtils messageUtils(){
-//        MessageUtils messageUtils = new MessageUtils(messageSource());
+//        MessageUtils messageUtils = new MessageUtils();
+//        messageUtils()
 //        return messageUtils;
 //    }
 
@@ -106,14 +103,13 @@ public class JpaTestApplication implements WebMvcConfigurer {
     }
     // multipart 세팅
 
-    @Bean
-    public MultipartConfigElement multipartConfigElement(){
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-
-        factory.setMaxFileSize(1024 * 1024 * 5);
-        factory.setMaxRequestSize(1024 * 1024 * 5);
-        return factory.createMultipartConfig();
-    }
+//    @Bean
+//    public MultipartConfigElement multipartConfigElement(){
+//        MultipartConfigFactory factory = new MultipartConfigFactory();
+//        factory.setMaxFileSize(1024 * 1024 * 5);
+//        factory.setMaxRequestSize(1024 * 1024 * 5);
+//        return factory.createMultipartConfig();
+//    }
 
     @Bean
     public ScheduledExecutorService taskExecutor() { return Executors.newScheduledThreadPool(20); }
@@ -145,14 +141,15 @@ public class JpaTestApplication implements WebMvcConfigurer {
         resolver.setDefaultViews(defaultViews);
         resolver.setOrder(0);
 
-        List<ViewResolver> viewResolvers = new ArrayList<>();
-        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
-        internalResourceViewResolver.setPrefix("/WEB-INF/views/");
-        internalResourceViewResolver.setSuffix(".jsp");
-        internalResourceViewResolver.setOrder(1);
-        internalResourceViewResolver.setRequestContextAttribute("requestContext");
-        viewResolvers.add(internalResourceViewResolver);
-        resolver.setViewResolvers(viewResolvers);
+//        List<ViewResolver> viewResolvers = new ArrayList<>();
+//        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
+//        internalResourceViewResolver.setPrefix("/WEB-INF/views/");
+//        internalResourceViewResolver.setSuffix(".jsp");
+//        internalResourceViewResolver.setOrder(1);
+//        internalResourceViewResolver.setRequestContextAttribute("requestContext");
+//        viewResolvers.add(internalResourceViewResolver);
+//        resolver.setViewResolvers(viewResolvers);
         return resolver;
     }
+
 }
