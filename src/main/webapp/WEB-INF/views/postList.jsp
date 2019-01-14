@@ -20,34 +20,38 @@
             <th>rdate</th>
         </thead>
         <tbody>
-            <c:forEach items="${postList}" var="post">
+            <c:forEach items="${postList.content}" var="post">
             <tr>
                 <td><a href="/post/write/${post.id}">${post.id}</a></td>
                 <td>${post.title}</td>
                 <td>${post.authorDetail.name}</td>
                 <td>${post.regDate}</td>
-                <%--<td></td>--%>
             </tr>
             </c:forEach>
         </tbody>
     </table>
     <div>
+        <c:import url="paging.jsp">
+            <c:param name="functionName" value="movePage"/>
+            <c:param name="page" value="postList.pageable.page"/>
+        </c:import>
+    </div>
+    <div>
         <button class='btn btn-default' onclick="addPost()">ADD POST</button>
     </div>
-    <%@include file="paging.jsp"%>
 </body>
 </html>
 <script>
-    function movePage(pageNo) {
-        let url = '/gameCharacter/list?';
+    const movePage = (pageNo) => {
+        let url = '/post/list?';
         if (pageNo > 0) {
-            url += '&pageNo=' + pageNo;
+            url += '&page=' + pageNo;
         }
         console.log(url);
         location.href = url;
     }
 
-    function addPost(){
+    const addPost = () => {
         location.href='/post/write';
     }
 </script>

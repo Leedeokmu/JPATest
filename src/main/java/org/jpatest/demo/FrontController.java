@@ -1,18 +1,23 @@
 package org.jpatest.demo;
 
+import org.jpatest.demo.dto.Paging;
 import org.jpatest.demo.model.Author;
 import org.jpatest.demo.model.Post;
 import org.jpatest.demo.repository.AuthorRepository;
 import org.jpatest.demo.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +45,20 @@ public class FrontController {
     }
 
     @GetMapping("post/list")
-    public String getPostList(Model model) {
-        List<Post> postList = postRepository.findAll();
+    public String getPostList(
+            Pageable pageable,
+            Model model
+    ) {
+        pageable = PageRequest.of(pageable.getPageNumber() == 0 ? pageable.getPageNumber() : pageable.getPageNumber() - 1, 4, new Sort(Sort.Direction.DESC, "id"));
+        Page<Post> postList = postRepository.findAll(pageable);
+
+        Paging paging = new Paging();
+        paging.setPageNo(pageable.getPageNumber() + 1);
+        paging.setPageSize(pageable.getPageSize());
+        paging.setTotalCount((int)postList.getTotalElements());
 
         model.addAttribute("postList", postList);
+        model.addAttribute("paging", paging);
         return "postList";
     }
 
